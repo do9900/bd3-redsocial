@@ -1,0 +1,26 @@
+Consultas bd3:
+
+Mostrar todos los cargos
+db.cargo.find().pretty()
+
+Mostrar los mensajes generados despues de la fecha 2021-01-15
+db.mensaje.find({"fecha":{"$gte":ISODate("2021-01-15")}}).pretty()
+
+Mostrar el cargo de un estudiante:
+
+db.usuario.aggregate([{$lookup:{from:"cargo",localField:"cargo",foreignField:"_id", as:"cargo-detalles"}}]).pretty()
+
+
+Dar a detalles quién envió y quién recibió un mensaje:
+
+db.mensaje.aggregate([{$lookup:{from:"usuario",localField:"emisor", foreignField:"_id", as:"emisor-data"}},{$lookup:{from:"usuario", localField:"receptor", foreignField:"_id", as:"receptor-data"}}]).pretty()
+
+Ver miembros que pertenecen a un grupo:
+
+db.grupo.aggregate([{$lookup:{from:"usuario", localField:"miembros", foreignField:"_id", as:"usuario-detalle"}}]).pretty()
+
+Detalle de un comentario, quién lo realiza y en qué post:
+
+db.comentarios.aggregate([{$lookup:{from:"usuario",localField:"usuario", foreignField:"_id", as:"usuario-data"}},{$lookup:{from:"post", localField:"post", foreignField:"_id", as:"post-data"}}]).pretty()
+
+
